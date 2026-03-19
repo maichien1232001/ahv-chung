@@ -47,3 +47,5 @@ Desktop.ini
 # Figma scrape/export artifacts (local only)
 figma_friendly*
 .figma_friendly*
+
+.cursor*
