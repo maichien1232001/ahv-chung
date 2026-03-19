@@ -121,3 +121,17 @@ body::-webkit-scrollbar-track {
   animation: bg-gradient-move 20s ease-in-out infinite alternate;
 }
 
+.colorcode-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  /* Gradient nền giống ImageColorPicker (clone UI-only) */
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255, 140, 170, 0.55), transparent 42%),
+    radial-gradient(circle at 78% 18%, rgba(100, 210, 255, 0.48), transparent 45%),
+    radial-gradient(circle at 75% 78%, rgba(70, 235, 185, 0.42), transparent 45%),
+    linear-gradient(90deg, rgba(255, 182, 154, 0.78) 0%, rgba(249, 248, 242, 0.95) 42%, rgba(105, 222, 200, 0.76) 100%);
+}
+

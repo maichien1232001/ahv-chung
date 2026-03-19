@@ -43,7 +43,7 @@ export const HeroSlider: React.FC = () => {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className={`relative flex h-screen snap-start items-center overflow-hidden border-b border-slate-200 transition-all duration-700 ease-out ${animationClass}`}
+      className={`relative overflow-hidden border-b border-slate-200 transition-all duration-700 ease-out ${animationClass}`}
     >
       {/* Ảnh banner làm background */}
       <div className="absolute inset-0">
