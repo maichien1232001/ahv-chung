@@ -1,0 +1,35 @@
+{
+  "name": "ahv-lp-page",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd fontend && npm run dev",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd fontend && npm run build"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.3",
+    "swagger-ui-express": "^5.0.1",
+    "swagger-jsdoc": "^6.2.8",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "express-validator": "^7.3.1",
+    "joi": "^18.0.2",
+    "type": "^2.7.3"
+  },
+  "devDependencies": {
+    "@vercel/node": "^5.3.7",
+    "@types/node": "^25.0.3",
+    "@types/express": "^5.0.6",
+    "typescript": "^5.9.3",
+    "ts-node": "^10.9.2"
+  }
+}
