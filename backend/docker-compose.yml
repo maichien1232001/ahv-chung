@@ -1,0 +1,33 @@
+x-logging-options: &default-logging
+    driver: 'json-file'
+    options:
+        max-size: '10m'
+        max-file: '5'
+
+services:
+    modnix-lp-be:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        image: modnix-lp-be:latest
+        container_name: modnix-lp-be-${CUSTOMER:-dev}
+        security_opt:
+            - no-new-privileges:true
+        ports:
+            - '${PORT:-5005}:${PORT:-5005}'
+        healthcheck:
+            test: ['CMD', 'curl', '--fail', 'http://localhost:${PORT:-5005}/health']
+            interval: 30s
+            retries: 3
+            timeout: 8s
+            start_period: 5s
+        restart: always
+        logging: *default-logging
+        env_file: .env
+        networks:
+            - shared_network
+
+networks:
+    shared_network:
+        external: true
+        name: ${CUSTOMER:-dev}_internal_net

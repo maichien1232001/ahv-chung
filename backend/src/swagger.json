@@ -1,0 +1,1789 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AHV Landing Page API",
+    "description": "API Doccument for AHV landing page",
+    "version": "1.0.0",
+    "contact": {
+      "email": ""
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5001/api/v1",
+      "description": "Local"
+    },
+    {
+      "url": "http://103.253.21.98:5001/api/v1",
+      "description": "DEV"
+    },
+    {
+      "url": "http://103.253.21.133:5001/api/v1",
+      "description": "STG"
+    },
+    {
+      "url": "",
+      "description": "PRO"
+    }
+  ],
+  "paths": {
+    "/auths": {
+      "post": {
+        "tags": [
+          "Unauthorized"
+        ],
+        "summary": "Đăng nhập",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ILogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Đăng nhập thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Tài khoản hoặc mật khẩu không chính xác"
+          }
+        }
+      }
+    },
+    "/auths/refresh": {
+      "put": {
+        "tags": [
+          "Unauthorized"
+        ],
+        "summary": "Refres token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IRefreshToken"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Refres token thành công"
+          },
+          "401": {
+            "description": "Token không hợp lệ"
+          }
+        }
+      }
+    },
+    "/auths/me": {
+      "get": {
+        "tags": [
+          "Unauthorized"
+        ],
+        "summary": "Lấy thông tin user theo token",
+        "security":[
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token không hợp lệ"
+          },
+          "404": {
+            "description": "Không tìm thấy người dùng"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Lấy danh sách người dùng",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Số trang hiện tại",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Số lượng bản ghi trên mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Tạo người dùng mới",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Đã tạo thành công"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "409": {
+            "description": "username đã tồn tại"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Lấy thông tin người dùng bằng id",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của người dùng",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy người dùng"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Sửa thông tin người dùng",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của người dùng",
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IUserUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sửa thông tin người dùng thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy người dùng"
+          },
+          "409": {
+            "description": "username đã tồn tại"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Xoá người dùng",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của người dùng",
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Xoá người dùng thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy người dùng"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Lấy danh sách bài viết",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Số trang hiện tại",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Số lượng bản ghi trên mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Ký tự lọc theo title bài viết",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "description": "lọc theo tags bài viết",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "ID của danh mục",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Tạo bài viết",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Đã tạo thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy danh mục"
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Lấy thông tin bài viết bằng id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của người dùng",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Không tìm thấy bài viết"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Xoá bài viết",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của người dùng",
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Xoá bài viết thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy bài viết"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Sửa thông tin bài viết",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của bài viết",
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sửa thông tin bài viết thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy danh mục"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Lấy danh sách danh mục",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Số trang hiện tại",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Số lượng bản ghi trên mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Ký tự lọc theo name category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Tạo danh mục",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Đã tạo thành công"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "409": {
+            "description": "Tên danh mục đã tồn tại"
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Lấy thông tin danh mục bằng id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của danh mục",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Không tìm thấy danh mục"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Sửa thông tin danh mục",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của danh mục",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Category"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sửa thông tin danh mục thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "409": {
+            "description": "Tên danh mục đã tồn tại"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Category"
+        ],
+        "summary": "Xoá danh mục",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của danh mục",
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Xoá danh mục thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy danh mục"
+          }
+        }
+      }
+    },
+    "/tickets": {
+      "get": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Lấy danh sách vấn đề",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Số trang hiện tại",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Số lượng bản ghi trên mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Ticket"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Tạo Ticket",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Ticket"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Đã tạo thành công"
+          }
+        }
+      }
+    },
+    "/tickets/{id}": {
+      "get": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Lấy thông tin Ticket bằng id",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của Ticket",
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Ticket"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Không đúng định dạng id"
+          },
+          "404": {
+            "description": "Không tìm thấy Ticket"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Sửa status Ticket",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của Ticket",
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ITicketUpdateStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sửa thông tin Ticket thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Không tìm thấy Ticket"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Xoá Ticket",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của ticket",
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Xoá Ticket thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy Ticket"
+          }
+        }
+      }
+    },
+    "/cvs": {
+      "get": {
+        "tags": [
+          "CV"
+        ],
+        "summary": "Lấy danh sách CV",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Số trang hiện tại",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Số lượng bản ghi trên mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "jobDescriptionId",
+            "in": "query",
+            "description": "Ký tự lọc theo id jd",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CV"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CV"
+        ],
+        "summary": "Tạo CV ",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICVCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Đã tạo thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Không tìm thấy JD"
+          }
+        }
+      }
+    },
+    "/cvs/{id}": {
+      "get": {
+        "tags": [
+          "CV"
+        ],
+        "summary": "Lấy thông tin CV bằng id",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của CV",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/CV"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Không tìm thấy CV"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "CV"
+        ],
+        "summary": "Sửa satatus CV",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của CV",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ICVUpdateStatus"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sửa thông tin CV thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Không tìm thấy CV"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          }
+        }
+      }
+    },
+    "/cvs/stats/status": {
+      "get": {
+        "tags": [
+          "CV"
+        ],
+        "summary": "Lấy danh sách CV",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thống kê trạng thái CV Tìm thấy thành công"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          }
+        }
+      }
+    },
+    "/jds": {
+      "get": {
+        "tags": [
+          "JobDescription"
+        ],
+        "summary": "Lấy danh sách JD",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Số trang hiện tại",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Số lượng bản ghi trên mỗi trang",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 10,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Ký tự lọc theo title jd",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "description": "Ký tự lọc theo location jd",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "JobDescription"
+        ],
+        "summary": "Tạo JD",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobDescription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Đã tạo thành công"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          }
+        }
+      }
+    },
+    "/jds/{id}": {
+      "get": {
+        "tags": [
+          "JobDescription"
+        ],
+        "summary": "Lấy thông tin JD bằng id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID của JD",
+            "schema": {
+              "example": "658af1...",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Không tìm thấy JD"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "JobDescription"
+        ],
+        "summary": "Sửa thông tin JD",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của JD",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobDescription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sửa thông tin JD thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Xác thực quyền thất bại"
+          },
+          "404": {
+            "description": "Không tìm thấy JD"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "JobDescription"
+        ],
+        "summary": "Xoá JD",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID của JD",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "658af1..."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Xoá Job thành công"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Không tìm thấy JD"
+          },
+          "401": {
+            "description": "Không tìm thấy JD"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "required": [
+          "name",
+          "username",
+          "password"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID tự động sinh bởi MongoDB",
+            "example": "658af1...",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Nguyen Van A"
+          },
+          "username": {
+            "type": "string",
+            "example": "anguyen99"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "description": "Chỉ dùng khi Create/Update",
+            "writeOnly": true
+          },
+          "status": {
+            "type": "string",
+            "example": "active",
+            "readOnly": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        }
+      },
+      "Post": {
+        "type": "object",
+        "required": [
+          "title",
+          "content",
+          "categoryId"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID tự động sinh bởi MongoDB",
+            "example": "658af1...",
+            "readOnly": true
+          },
+          "title": {
+            "type": "string",
+            "example": "Bài viết về nấm"
+          },
+          "content": {
+            "type": "string",
+            "example": "Bài viết về nấm ..."
+          },
+          "status": {
+            "type": "string",
+            "example": "active",
+            "readOnly": true
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "Dùng để liên kết với bảng category",
+            "example": "658af1..."
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://..."
+          },
+          "tags": {
+            "type": "array[string]",
+            "example": "hot, new"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        }
+      },
+      "Ticket": {
+        "type": "object",
+        "required": [
+          "fullname",
+          "phone"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID tự động sinh bởi MongoDB",
+            "example": "658af1...",
+            "readOnly": true
+          },
+          "fullname": {
+            "type": "string",
+            "example": "Nguyen Van A"
+          },
+          "phone": {
+            "type": "string",
+            "format": "number",
+            "example": "0123456789"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "example@gmail.com"
+          },
+          "description": {
+            "type": "string",
+            "example": "yêu cầu ..."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID tự động sinh bởi MongoDB",
+            "example": "658af1...",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Việc làm"
+          },
+          "description": {
+            "type": "string",
+            "example": "Danh mục việc làm"
+          },
+          "status": {
+            "type": "string",
+            "example": "active",
+            "readOnly": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        }
+      },
+      "CV": {
+        "type": "object",
+        "required": [
+          "filePath",
+          "jobDescription"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID tự động sinh bởi MongoDB",
+            "example": "658af1...",
+            "readOnly": true
+          },
+          "filePath": {
+            "type": "string",
+            "example": "https://..."
+          },
+          "jobDecriptionId": {
+            "type": "string",
+            "description": "ID tự động sinh bởi MongoDB",
+            "example": "658af1..."
+          },
+          "status": {
+            "type": "string",
+            "example": "active",
+            "readOnly": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        }
+      },
+      "JobDescription": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "ID tự động sinh bởi MongoDB",
+            "example": "658af1...",
+            "readOnly": true
+          },
+          "title": {
+            "type": "string",
+            "example": "Lập trình viên backend"
+          },
+          "position": {
+            "type": "string",
+            "description": "Chức vụ",
+            "example": "Nhân viên chính thức"
+          },
+          "salary": {
+            "type": "string",
+            "description": "Mức lương",
+            "example": "1000$"
+          },
+          "experience": {
+            "type": "string",
+            "description": "Kinh nhiệm làm việc",
+            "example": "1 year"
+          },
+          "level": {
+            "type": "string",
+            "example": "junior"
+          },
+          "jobType": {
+            "type": "string",
+            "example": "fulltime"
+          },
+          "gender": {
+            "type": "string",
+            "example": "male"
+          },
+          "location": {
+            "type": "string",
+            "example": "Ha Noi"
+          },
+          "description": {
+            "type": "string"
+          },
+          "requirements": {
+            "type": "string",
+            "example": "Có kinh nghiệm > 2y, ngôn ngữ js, ..."
+          },
+          "benefits": {
+            "type": "string",
+            "example": "Lương, thưởng, giờ làm việc,..."
+          },
+          "quantity": {
+            "type": "number",
+            "example": "2"
+          },
+          "expiredAt": {
+            "type": "string",
+            "description": "Thời gian hết hạn ứng tuyển",
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "readOnly": true
+          }
+        }
+      },
+      "ILogin": {
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "anguyen99"
+          },
+          "password": {
+            "type": "string",
+            "example": "0123456789"
+          }
+        }
+      },
+      "IRefreshToken": {
+        "type": "object",
+        "required": [
+          "refreshToken"
+        ],
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTUxZTJjNjg4OTQ3NTczMmUxOTRmYjIiLCJ1c2VybmFtZSI6ImNodW5nZ2cxIiwiaWF0IjoxNzY3NjYzMzE4LCJleHAiOjE3NzAyNTUzMTh9.5neHtgbemqlcBcDp6SueC03ybUKWXZb4zyHGU_BmPLs"
+          }
+        }
+      },
+      "IUserUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "chungggg"
+          },
+          "username": {
+            "type": "string",
+            "example": "chungggg"
+          }
+        }
+      },
+      "ITicketUpdateStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "processed"
+          }
+        }
+      },
+      "ICVCreate": {
+        "type": "object",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "example": "https://..."
+          },
+          "jobDescriptionId": {
+            "type": "string",
+            "example": "658af1..."
+          }
+        }
+      },
+      "ICVUpdateStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "approve"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

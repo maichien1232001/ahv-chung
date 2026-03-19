@@ -1,0 +1,36 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+.yarn-cache/
+.pnp.*
+
+# Build outputs
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# logs
+logs/
+
+# Test & Coverage
+coverage/
+junit.xml
+*.log
+*.lcov
+test
+
+# Environment variables
+.env
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Docker
+.docker/
+
+.cursor/
