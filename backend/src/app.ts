@@ -12,13 +12,16 @@ const app = express();
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-connectDB();
+export const initApp = async () => {
+    await connectDB();
+    await seedAdmin();
+};
 
 app.use(cookieParser());
 
 app.use(express.json());
 
-seedAdmin();
+app.use(express.json());
 
 const allowedOrigins = (ENV.LINK_COR ?? '')
     .split(',')
