@@ -23,8 +23,9 @@
       "destination": "/api/index.ts"
     },
     {
-      "source": "/health",
-      "destination": "/api/index.ts"
+      "source": "/(.*)",
+      "destination": "/$1",
+      "continue": true
     },
     {
       "source": "/(.*)",

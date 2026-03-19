@@ -40,5 +40,6 @@ app.use(
 app.use('/api/v1', allRoutes);
 
 app.get('/health', (req: Request, res: Response) => res.status(200).send('OK'));
+app.get('/api/health', (req: Request, res: Response) => res.status(200).send('OK'));
 
 export default app;
